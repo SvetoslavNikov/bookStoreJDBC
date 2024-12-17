@@ -6,7 +6,7 @@ Features
 Each database table has:
   - A class representing the table structure.
   - A DAO (Data Access Object) class with CRUD operations.
-  - Unit tests for every DAO method.
+  - Unit tests for DAO CRUD methods.
 
 Utility classes include:
   - Establishing connections to the PostgreSQL database.
