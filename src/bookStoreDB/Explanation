@@ -1,0 +1,91 @@
+package bookStoreDB;
+
+import java.sql.*;
+//The Connection interface is part of the JDBC (Java Database Connectivity) API
+// defines methods for interacting with a database
+// creating statements, managing transactions...
+// DriverManager class is part of the JDBC (Java Database Connectivity) API
+// responsible for establishing connections to a database.
+// It acts as a factory that provides connections.
+
+// Use the sql package
+
+public class bookStoreDB.utils.DatabaseConnection {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/bookstoredb";
+        // db URL
+        String username = "root";
+        // username for MySQL
+        String password = "Tempzm22062002.";
+        // password for MySQL
+
+        try
+        (Connection connection = DriverManager.getConnection(url, username, password)) {
+
+--------------Try-with-resources feature--------------
+Key Points:
+Resource Declaration:
+Declare the resource inside the parentheses () after try.
+
+
+Auto-Closeable: The resource must implement AutoCloseable or Closeable interface,
+which ensures the resource is closed at the end of the try block.
+
+Simplifies Code: No need for explicit close calls.
+
+
+--------------What getConnection Does:----------------
+
+Establishes a Connection: DriverManager.getConnection(url, username, password)
+establishes a connection to the database using the provided URL, username, and password.
+
+Loads the Driver: It loads the appropriate JDBC driver to connect to the database.
+The URL usually specifies which driver to use (e.g., jdbc:mysql:// implies the MySQL driver).
+
+Returns a Connection: Returns a Connection object, which is an instance of a class
+that implements the Connection interface.
+
+Under the Hood:
+
+Driver Resolution: DriverManager maintains a list of registered drivers.
+When getConnection is called, it iterates through these drivers to find one
+that can handle the specified URL. (in this case the mysql driver)
+
+Driver-Specific Connection:
+The selected driver’s implementation of getConnection is called,
+returning a driver-specific Connection object.
+This object implements the Connection interface,
+providing methods to interact with the database.
+
+
+
+            // Automatically close connection with try-with-resources
+             */
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM bookStoreDB.books");
+
+            // Print out the author for each book in the ResultSet
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("author"));
+            }
+
+            // Close ResultSet and Statement (not strictly necessary with try-with-resources, but it's good practice)
+            resultSet.close();
+            statement.close();
+            // connection.close(); // Not needed here due to try-with-resources
+
+            System.out.println("Connected to the MySQL bookstoredb successfully");
+
+            // DriverManager checks the registered drivers to find one
+            // that can handle the specified URL.
+            // It then calls the appropriate driver's method to create a Connection object.
+            // The object returned by getConnection is an instance of a driver class
+            // that implements the Connection interface,
+            // which is provided by the specific JDBC driver (MySQL Connector/J)
+
+        } catch (SQLException e) {
+            System.out.println("Connection failed");
+            e.printStackTrace(); // Print error details to the console
+        }
+    }
+}
